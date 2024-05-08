@@ -4,6 +4,7 @@
         "__locale": "cpp",
         "bitset": "cpp",
         "typeinfo": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "stdexcept": "cpp"
     }
 }

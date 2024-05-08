@@ -34,25 +34,9 @@ void Graph::loadGraph(const vector<vector<int> > &adjMatrix)
     this->adjacencyMatrix = adjMatrix;
 }
 
-// void Graph::printGraph() const
-// {
-//     int n = adjacencyMatrix.size();
-//     int edgeCount = 0;
-//     for (unsigned long i = 0; i < n; ++i)
-//     {
-//         for (unsigned long j = 0; j < n; ++j)
-//         {
-//             if (adjacencyMatrix[i][j] != 0)
-//             {
-//                 edgeCount++;
-//             }
-//         }
-//     }
-//     cout << "Graph with " << n << " vertices and " << edgeCount << " edges." << endl;
-// }
-
 string Graph::printGraph() const
 {
+
     stringstream ss;
     int n = adjacencyMatrix.size();
     for (unsigned long i = 0; i < n; ++i)
@@ -123,16 +107,37 @@ Graph& Graph::operator--() {
 }
 
 Graph Graph::operator+(const Graph &other) {
-    // Implement the addition operator
+    // Check if the graphs have the same size
+    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
+        throw invalid_argument("not same size.");
+    }
+
     Graph resultGraph;
+    resultGraph.adjacencyMatrix.resize(this->adjacencyMatrix.size(), std::vector<int>(this->adjacencyMatrix.size(), 0));
+
     // Add the edge weights of the two graphs element-wise
-    // Ensure that the graphs have the same size before performing addition
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            resultGraph.adjacencyMatrix[i][j] = this->adjacencyMatrix[i][j] + other.adjacencyMatrix[i][j];
+        }
+    }
+
     return resultGraph;
 }
 
 Graph& Graph::operator+=(const Graph &other) {
-    // Implement the addition assignment operator
-    // Add the edge weights of the input graph to the current graph
+    // Check if the graphs have the same size
+    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
+        throw invalid_argument("not same size.");
+    }
+
+    // Add the edge weights of the two graphs element-wise
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            this->adjacencyMatrix[i][j] += other.adjacencyMatrix[i][j];
+        }
+    }
+
     return *this;
 }
 
@@ -143,16 +148,37 @@ Graph Graph::operator+() {
 }
 
 Graph Graph::operator-(const Graph &other) {
-    // Implement the addition operator
+    // Check if the graphs have the same size
+    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
+        throw invalid_argument("not same size.");
+    }
+
     Graph resultGraph;
-    // Add the edge weights of the two graphs element-wise
-    // Ensure that the graphs have the same size before performing addition
+    resultGraph.adjacencyMatrix.resize(this->adjacencyMatrix.size(), std::vector<int>(this->adjacencyMatrix.size(), 0));
+
+    // Remove the edge weights of the two graphs element-wise
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            resultGraph.adjacencyMatrix[i][j] = this->adjacencyMatrix[i][j] - other.adjacencyMatrix[i][j];
+        }
+    }
+
     return resultGraph;
 }
 
 Graph& Graph::operator-=(const Graph &other) {
-    // Implement the addition assignment operator
-    // Add the edge weights of the input graph to the current graph
+    // Check if the graphs have the same size
+    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
+        throw invalid_argument("not same size.");
+    }
+
+    // Remove the edge weights of the two graphs element-wise
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            this->adjacencyMatrix[i][j] -= other.adjacencyMatrix[i][j];
+        }
+    }
+
     return *this;
 }
 
@@ -163,31 +189,63 @@ Graph Graph::operator-() {
 }
 
 Graph Graph::operator/(int scalar) {
-    // Implement the addition operator
     Graph resultGraph;
-    // Add the edge weights of the two graphs element-wise
-    // Ensure that the graphs have the same size before performing addition
+    resultGraph.adjacencyMatrix.resize(this->adjacencyMatrix.size(), std::vector<int>(this->adjacencyMatrix.size(), 0));
+
+    // Remove the edge weights of the two graphs element-wise
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            resultGraph.adjacencyMatrix[i][j] = this->adjacencyMatrix[i][j] / scalar;
+        }
+    }
+
     return resultGraph;
 }
 
 Graph& Graph::operator/=(int scalar) {
-    // Implement the addition assignment operator
-    // Add the edge weights of the input graph to the current graph
+    // Divide the edge weights of the graph by the scalar
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            this->adjacencyMatrix[i][j] /= scalar;
+        }
+    }
+
     return *this;
 }
 
 Graph& Graph::operator*=(int scalar) {
-    // Implement the scalar multiplication operator
+    // Multiply the edge weights of the graph by the scalar
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            this->adjacencyMatrix[i][j] *= scalar;
+        }
+    }
+
     return *this;
 }
 
 Graph Graph::operator*(const Graph &other) {
-    // Implement the graph multiplication operator
-    return Graph();
+    // Check if the graphs have the same size
+    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
+        throw invalid_argument("The number of columns in the first matrix must be equal to the number of rows in the second matrix.");
+    }
+
+    Graph resultGraph;
+    resultGraph.adjacencyMatrix.resize(this->adjacencyMatrix.size(), std::vector<int>(this->adjacencyMatrix.size(), 0));
+
+    // Multiply the edge weights of the two graphs element-wise
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            resultGraph.adjacencyMatrix[i][j] = this->adjacencyMatrix[i][j] * other.adjacencyMatrix[j][i];
+        }
+    }
+
+    return resultGraph;
 }
 
 
 ostream& ariel::operator<<(ostream &os, const ariel::Graph &graph) {
+    
     const vector<vector<int>>& matrix = graph.getAdjacencyMatrix();
     for (size_t i = 0; i < matrix.size(); ++i) {
         os << "[";
