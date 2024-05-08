@@ -18,7 +18,7 @@
             Graph();
             ~Graph();
             void loadGraph(const vector<vector<int> > &matrix);
-            void printGraph() const;
+            string printGraph() const;
 
             const vector<vector<int> >& getAdjacencyMatrix() const;
             bool containsNegative() const; // Declare a getter for containNeg
