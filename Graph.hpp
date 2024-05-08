@@ -43,6 +43,10 @@ namespace ariel{
         Graph operator*(const Graph &other);
         // Output Operator
         friend ostream& operator<<(ostream &os, const Graph &graph);
+
+        bool isSubGraph(const Graph &other) const;
+        int edgeCount() const;
+
     };
 }
 #endif

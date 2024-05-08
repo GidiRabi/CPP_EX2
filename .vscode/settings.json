@@ -5,6 +5,8 @@
         "bitset": "cpp",
         "typeinfo": "cpp",
         "iostream": "cpp",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "queue": "cpp",
+        "stack": "cpp"
     }
 }

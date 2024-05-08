@@ -31,16 +31,16 @@ void Graph::loadGraph(const vector<vector<int> > &adjMatrix)
 
 string Graph::printGraph() const
 {
-
     stringstream ss;
     int n = adjacencyMatrix.size();
+    int m = (n > 0) ? adjacencyMatrix[0].size() : 0;
     for (unsigned long i = 0; i < n; ++i)
     {
         ss << "[";
-        for (unsigned long j = 0; j < n; ++j)
+        for (unsigned long j = 0; j < m; ++j)
         {
             ss << adjacencyMatrix[i][j];
-            if (j != n - 1) {
+            if (j != m - 1) {
                 ss << ", ";
             }
         }
@@ -62,42 +62,123 @@ bool Graph::containsNegative() const {
 }
 
 bool Graph::operator>(const Graph &other) {
-    // Implement the less than comparison logic
+    // Check if 'other' is a subgraph of 'this'
+    if (this->isSubGraph(other)) {
+        return true;
+    }
+
+    // If 'other' is not a subgraph of 'this' and 'this' is not a subgraph of 'other' and the graphs are not equal
+    if (!other.isSubGraph(*this) && *this != other) {
+        // If 'this' has more edges than 'other'
+        if (this->edgeCount() > other.edgeCount()) {
+            return true;
+        }
+        // If 'this' and 'other' have the same number of edges and the order of 'this''s adjacency matrix is greater than the order of 'other''s adjacency matrix
+        else if (this->edgeCount() == other.edgeCount() && 
+         (this->adjacencyMatrix.size() * this->adjacencyMatrix[0].size()) > 
+         (other.adjacencyMatrix.size() * other.adjacencyMatrix[0].size())) {
+            return true;
+        }
+    }
+
     return false;
 }
 
 bool Graph::operator>=(const Graph &other) {
-    // Implement the greater than or equal to comparison logic
-    return false;
+    // If the graph is greater or equal to the other graph
+    return (*this > other) || (*this == other);
 }
 
 bool Graph::operator<(const Graph &other) {
-    // Implement the less than comparison logic
+    if (other.isSubGraph(*this)) {
+        return true;
+    }
+
+    if (!this->isSubGraph(other) && *this != other) {
+        if (this->edgeCount() < other.edgeCount()) {
+            return true;
+        }
+        else if (this->edgeCount() == other.edgeCount() && 
+         (this->adjacencyMatrix.size() * this->adjacencyMatrix[0].size()) < 
+         (other.adjacencyMatrix.size() * other.adjacencyMatrix[0].size())) {
+            return true;
+        }
+    }
+
     return false;
 }
 
 bool Graph::operator<=(const Graph &other) {
-    // Implement the less than or equal to comparison logic
-    return false;
+    return (*this < other) || (*this == other);
 }
 
 bool Graph::operator==(const Graph &other) {
-    // Implement the equal to comparison logic
-    return false;
+    //Check that both the graphs are the same size by rows and collums
+    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size() 
+            || this->adjacencyMatrix[0].size() != other.adjacencyMatrix[0].size()){
+        return false;
+    }
+
+    //If the size is the same, check if all the values in the matrix are the same
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            if(this->adjacencyMatrix[i][j] != other.adjacencyMatrix[i][j]){
+                return false;
+            }
+        }
+    }
+
+    return true;
+
 }
 
 bool Graph::operator!=(const Graph &other) {
-    // Implement the not equal to comparison logic
-    return false;
+
+    // bool check = false;
+    // //Checks if all the values in the matrix are the same
+    // for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+    //     for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+    //         if(!check){
+    //             if(this->adjacencyMatrix[i][j] != other.adjacencyMatrix[i][j]){
+    //                 check = true;
+    //             }
+    //         }
+    //     }
+    // }
+
+    // //If all the values are the same, check if the size of the matrix is the same
+    // if(!check){
+    //     if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size() 
+    //             || this->adjacencyMatrix[0].size() != other.adjacencyMatrix[0].size()){
+    //         return true;
+    //     }
+    // }
+
+    // return false;
+
+    //the opposite of ==
+    return !(*this == other);
 }
 
 Graph& Graph::operator++() {
-    // Implement the increment operator
+    //Increment all the values in the matrix by 1
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            this->adjacencyMatrix[i][j]++;
+        }
+    }
+
     return *this;
 }
 
 Graph& Graph::operator--() {
-    // Implement the decrement operator
+    //reduce all the values in the matrix by 1
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            this->adjacencyMatrix[i][j]--;
+        }
+    }
+
     return *this;
 }
 
@@ -178,12 +259,23 @@ Graph& Graph::operator-=(const Graph &other) {
 }
 
 Graph Graph::operator-() {
-    // Implement the unary plus operator
-    // Return a copy of the current graph with the same edge weights
-    return *this;
+    // Implement the unary minus operator
+    // Return a copy of the current graph with negated edge weights
+    Graph negated = *this;
+    for (size_t i = 0; i < negated.adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < negated.adjacencyMatrix[i].size(); ++j) {
+            negated.adjacencyMatrix[i][j] = -negated.adjacencyMatrix[i][j];
+        }
+    }
+
+    return negated;
 }
 
 Graph Graph::operator/(int scalar) {
+    if(scalar == 0){
+        throw invalid_argument("cannot divide by zero.");
+    }
+
     Graph resultGraph;
     resultGraph.adjacencyMatrix.resize(this->adjacencyMatrix.size(), std::vector<int>(this->adjacencyMatrix.size(), 0));
 
@@ -198,6 +290,10 @@ Graph Graph::operator/(int scalar) {
 }
 
 Graph& Graph::operator/=(int scalar) {
+    if(scalar == 0){
+        throw invalid_argument("cannot divide by zero.");
+    }
+
     // Divide the edge weights of the graph by the scalar
     for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
         for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
@@ -279,4 +375,39 @@ ostream& ariel::operator<<(ostream &os, const ariel::Graph &graph) {
         }
     }
     return os;
+}
+
+bool Graph::isSubGraph(const Graph &other) const {
+    // Check if 'other' is smaller or equal in size
+    if (other.adjacencyMatrix.size() > this->adjacencyMatrix.size() ||
+        other.adjacencyMatrix[0].size() > this->adjacencyMatrix[0].size()) {
+        return false;
+    }
+
+    // Check if all edges in 'other' also exist in 'this'
+    for (size_t i = 0; i < other.adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < other.adjacencyMatrix[i].size(); ++j) {
+            // If 'other' has an edge that 'this' does not, or if the edge in 'other' has a higher weight, return false
+            if ((other.adjacencyMatrix[i][j] > 0 && this->adjacencyMatrix[i][j] == 0) ||
+                (other.adjacencyMatrix[i][j] > this->adjacencyMatrix[i][j])) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+int Graph::edgeCount() const {
+    int count = 0;
+
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+            if (this->adjacencyMatrix[i][j] > 0) {
+                count++;
+            }
+        }
+    }
+
+    return count;
 }

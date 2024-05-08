@@ -1,22 +1,46 @@
-# Assignment 2 - graphs and operator loading
+# Assignment 2 - Graphs and Operator Overloading
 
-In the previous assignment, you implemented the class `Graph.cpp' which enables the representation of graphs with the help of an adjacency matrix. In this assignment, you will extend the class and add support for arithmetic operators on graphs.
-As mentioned, the graphs are represented using an adjacency matrix, therefore all operators should be valid for matrices (as you learned in the linear algebra course).
+This project extends the `Graph` class from the previous assignment to support arithmetic and comparison operators. The graph representation continues to use an adjacency matrix.
 
-You will need to add the following operators:
+## Implementation Method and Code Division
 
-- Six arithmetic operators: addition (+) addition (+=) plus unary (+), and the three operators corresponding to subtraction (-). As mentioned, addition/subtraction of two matrices is defined only on matrices of the same size order nXn. Attempting to add/subtract two matrices that do not meet this condition will result in an error being thrown.
-- Six comparison operators: greater, greater-or-equal, less, less-or-equal, equal, not-equal. For this task, the rules for comparing graphs are as follows:
+The `Graph` class is implemented in `Graph.cpp` and `Graph.h`. It uses a 2D vector to represent the adjacency matrix of the graph. The class includes methods for loading a graph from an adjacency matrix, printing the graph, and performing arithmetic and comparison operations.
 
-   1. Graphs G1 and G2 will be called equal if they are of the same order of magnitude and contain the same edges (and the weights of the edges are the same) or if G1 is not greater than G2 and neither is G2 greater than G1.
-   2. Graph G2 is larger than graph G1 if graph G1 is contained exactly in graph G2. If neither graph is exactly contained in the other and the graphs are not equal, then graph G2 is greater than graph G1 if the number of edges in G2 is greater than the number of edges in G1. If the number of edges is the same, then the graph G2 is larger than the graph G1 if the representative matrix of G2 has a higher order of magnitude than G1.
+The arithmetic and comparison operators are overloaded in the `Graph` class to perform element-wise operations on the adjacency matrices of the graphs. The increment and decrement operators, both prefix and postfix, are implemented to increase or decrease by 1 all the weights of the edges in the graph. The multiplication by an integer scalar multiplies the weight of all edges, and the graph multiplication multiplies the representative matrices of two graphs to produce a new graph.
 
-- Increase by 1 (++) and decrease by 1 (--) before and after the number. This action will increase or decrease by 1 all the weights of the edges in the graph.
-- Multiplication by an integer scalar (`int`) - Multiplies the weight of all sides.
-- Graph multiplication - we define the multiplication operation between graph G1 and graph G2 by multiplying the representative matrices of the two graphs. The result should be a matrix representing a graph. Attempting to perform multiplication between graphs of different sizes should throw an error.
-- Output operator - logical printing of the graph (the form of the output is up to you).
+The `Algorithms.cpp` file contains implementations of various graph algorithms, including those from the previous assignment and any new ones required for this assignment.
 
+The `Demo.cpp` file provides examples of how to use the implemented algorithms and operators.
 
-Also, you should also include the `Algorithms.cpp` file from the previous assignment and see how the functions you defined last time change now. In addition to the files for the assignment, you are also required to submit a README file describing the implementation method and the division you made in the code (a type of user guide).
-You must write your ID number and email at the beginning of each file. Failure to comply with the guidelines will result in a grade reduction.
-Successfully!
+## Files
+
+- `Graph.cpp`: Contains the implementation of the `Graph` class, including methods to load a graph from an adjacency matrix, print the graph, and perform arithmetic and comparison operations.
+- `Algorithms.cpp`: Implements various graph algorithms, including those from the previous assignment and any new ones required for this assignment.
+- `Demo.cpp`: Provides examples of input and output for the implemented algorithms and operators.
+
+## Running the Program
+
+To compile the program, run `make all`. This will generate the executable files `main` and `test`.
+
+- `./main`: Executes the main function, demonstrating the usage of the implemented algorithms and operators.
+- `./test`: Runs the test suite to validate the correctness of the implemented algorithms and operators.
+
+## Usage
+
+- `Graph.cpp`: Include this file in your project to use the `Graph` class for representing graphs, loading them from adjacency matrices, and performing arithmetic and comparison operations.
+- `Algorithms.cpp`: Include this file in your project to use the implemented graph algorithms.
+- `Main.cpp`: Refer to this file for examples of how to use the implemented algorithms and operators.
+
+## Operators Implemented
+
+- Six arithmetic operators: addition (+), addition (+=), unary plus (+), and the corresponding subtraction (-) operators.
+- Six comparison operators: greater, greater-or-equal, less, less-or-equal, equal, not-equal.
+- Increment (++) and decrement (--) operators, both prefix and postfix. These increase or decrease by 1 all the weights of the edges in the graph.
+- Multiplication by an integer scalar (`int`): Multiplies the weight of all edges.
+- Graph multiplication: Multiplies the representative matrices of two graphs to produce a new graph.
+- Output operator: Prints the graph.
+
+## Author
+
+Gidi Rabi
+gidirabi111@gmail.com
