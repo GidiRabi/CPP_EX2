@@ -225,18 +225,20 @@ Graph& Graph::operator*=(int scalar) {
 }
 
 Graph Graph::operator*(const Graph &other) {
-    // Check if the graphs have the same size
-    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
+    // Check if the number of columns in the first graph is equal to the number of rows in the second graph
+    if (this->adjacencyMatrix[0].size() != other.adjacencyMatrix.size()) {
         throw invalid_argument("The number of columns in the first matrix must be equal to the number of rows in the second matrix.");
     }
 
     Graph resultGraph;
-    resultGraph.adjacencyMatrix.resize(this->adjacencyMatrix.size(), std::vector<int>(this->adjacencyMatrix.size(), 0));
+    resultGraph.adjacencyMatrix.resize(this->adjacencyMatrix.size(), std::vector<int>(other.adjacencyMatrix[0].size(), 0));
 
-    // Multiply the edge weights of the two graphs element-wise
+    // Multiply the adjacency matrices of the two graphs
     for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
-        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
-            resultGraph.adjacencyMatrix[i][j] = this->adjacencyMatrix[i][j] * other.adjacencyMatrix[j][i];
+        for (size_t j = 0; j < other.adjacencyMatrix[0].size(); ++j) {
+            for (size_t k = 0; k < this->adjacencyMatrix[0].size(); ++k) {
+                resultGraph.adjacencyMatrix[i][j] += this->adjacencyMatrix[i][k] * other.adjacencyMatrix[k][j];
+            }
         }
     }
 
