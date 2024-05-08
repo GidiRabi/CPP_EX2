@@ -1,3 +1,4 @@
+// 325483444 gidirabi111@gmail.com
 #include "Graph.hpp"
 #include <iostream>
 #include <sstream>
@@ -12,15 +13,9 @@ Graph::~Graph() {}
 void Graph::loadGraph(const vector<vector<int> > &adjMatrix)
 {
     // Validate the adjacency matrix
-    int n = adjMatrix.size();
     for (const auto &row : adjMatrix)
     {
-        if (row.size() != n)
-        {
-            throw invalid_argument("Invalid graph: The graph is not a square matrix.");
-        }
-
-         // Check for negative values
+        // Check for negative values
         for (const auto &value : row)
         {
             if (value < 0)
@@ -221,6 +216,27 @@ Graph& Graph::operator*=(int scalar) {
         }
     }
 
+    return *this;
+}
+
+Graph Graph::operator*=(const Graph &other) {
+    // Check if the number of columns in the first graph is equal to the number of rows in the second graph
+    if (this->adjacencyMatrix[0].size() != other.adjacencyMatrix.size()) {
+        throw invalid_argument("The number of columns in the first matrix must be equal to the number of rows in the second matrix.");
+    }
+
+    Graph resultGraph;
+    resultGraph.adjacencyMatrix.resize(this->adjacencyMatrix.size(), std::vector<int>(other.adjacencyMatrix[0].size(), 0));
+
+    // Multiply the adjacency matrices of the two graphs
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < other.adjacencyMatrix[0].size(); ++j) {
+            for (size_t k = 0; k < this->adjacencyMatrix[0].size(); ++k) {
+                resultGraph.adjacencyMatrix[i][j] += this->adjacencyMatrix[i][k] * other.adjacencyMatrix[k][j];
+            }
+        }
+    }
+    this->adjacencyMatrix = resultGraph.adjacencyMatrix;
     return *this;
 }
 

@@ -1,3 +1,4 @@
+// 325483444 gidirabi111@gmail.com
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest.h"
 using namespace doctest;
@@ -25,6 +26,7 @@ struct ReporterCounter : public ConsoleReporter
         else
         {
             cout << "Please write at least " << MIN_TESTS << " tests! " << endl;
+            cout << "Current number of tests: " << run_stats.numAsserts << endl;
             return_code = 1;
         }
     }

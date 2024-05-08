@@ -1,3 +1,4 @@
+// 325483444 gidirabi111@gmail.com
 #include "Graph.hpp"
 #include "Algorithms.hpp"
 using ariel::Algorithms;
@@ -37,12 +38,14 @@ int main()
 
     g1 *= -2;        // Multiply the graph by -2.
     cout<<g1; // Should print the matrix of the graph: [0, -2, 0], [-2, 0, -2], [0, -2, 0]
+    nl
 
     g1 /= -2;
+
     ariel::Graph g4 = g1 * g2; // Multiply the two graphs together.
     cout<<g4;           // Should print the multiplication of the matrices of g1 and g2: [0, 0, 2], [1, 0, 1], [1, 0, 0]
     nl
-    
+
     // 5x5 matrix that represents a connected graph.
     vector<vector<int>> graph2 = {
         {0, 1, 0, 0, 1},
