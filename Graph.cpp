@@ -9,19 +9,24 @@ using namespace ariel;
 Graph::Graph() : containNeg(false) {} // Initialize containNeg to false in the constructor
 Graph::~Graph() {}
 
-
 void Graph::loadGraph(const vector<vector<int> > &adjMatrix)
 {
     // Validate the adjacency matrix
-    for (const auto &row : adjMatrix)
+    for (size_t i = 0; i < adjMatrix.size(); ++i)
     {
-        // Check for negative values
-        for (const auto &value : row)
+        const auto &row = adjMatrix[i];
+        for (size_t j = 0; j < row.size(); ++j)
         {
+            const auto &value = row[j];
+            // Check for negative values
             if (value < 0)
             {
                 containNeg = true;
-                break;
+            }
+            // Check if diagonal elements are 0
+            if (i == j && value != 0)
+            {
+                throw std::invalid_argument("Main diagonal elements must be 0");
             }
         }
     }
@@ -333,6 +338,9 @@ Graph Graph::operator*=(const Graph &other) {
         }
     }
     this->adjacencyMatrix = resultGraph.adjacencyMatrix;
+
+    setDiagonalToZero(*this);
+
     return *this;
 }
 
@@ -353,6 +361,8 @@ Graph Graph::operator*(const Graph &other) {
             }
         }
     }
+
+    setDiagonalToZero(resultGraph);
 
     return resultGraph;
 }
@@ -410,4 +420,10 @@ int Graph::edgeCount() const {
     }
 
     return count;
+}
+
+void Graph::setDiagonalToZero(Graph &graph) {
+    for (size_t i = 0; i < graph.adjacencyMatrix.size(); ++i) {
+        graph.adjacencyMatrix[i][i] = 0;
+    }
 }

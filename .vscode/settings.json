@@ -7,6 +7,7 @@
         "iostream": "cpp",
         "stdexcept": "cpp",
         "queue": "cpp",
-        "stack": "cpp"
+        "stack": "cpp",
+        "sstream": "c"
     }
 }

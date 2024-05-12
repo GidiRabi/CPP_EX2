@@ -47,6 +47,8 @@ namespace ariel{
         bool isSubGraph(const Graph &other) const;
         int edgeCount() const;
 
+        static void setDiagonalToZero(Graph &graph);
+
     };
 }
 #endif
