@@ -83,79 +83,44 @@ bool Algorithms::isConnected(const Graph &graph)
  * If there is a negative cycle in the graph, it returns "-1".
  * The path is returned as a string of vertices, separated by "->".
  */
-// string Algorithms::shortestPath(const Graph &graph, size_t start, size_t end)
-// {
-//     vector<vector<int>> adjMatrix = graph.getAdjacencyMatrix();
-//     size_t n = adjMatrix.size();
-//     vector<size_t> distance(n, numeric_limits<size_t>::max());
-//     vector<size_t> parent(n, numeric_limits<size_t>::max());
-
-//     distance[start] = 0;
-//     queue<size_t> q;
-//     q.push(start);
-
-//     if (negativeCycle(graph))
-//     {
-//         return "-1";
-//     }
-
-//     while (!q.empty())
-//     {
-//         size_t node = q.front();
-//         q.pop();
-
-//         for (size_t i = 0; i < n; ++i)
-//         {
-//             if (adjMatrix[node][i] != 0 && distance[i] == numeric_limits<size_t>::max())
-//             {
-//                 distance[i] = distance[node] + 1;
-//                 parent[i] = node;
-//                 q.push(i);
-//             }
-//         }
-//     }
-
-//     if (distance[end] == numeric_limits<size_t>::max()) {
-//         return "-1";
-//     }
-
-//     // Reconstruct the shortest path
-//     string path;
-//     for (size_t v = end; v != numeric_limits<size_t>::max(); v = parent[v])
-//     {
-//         path = to_string(v) + (path.empty() ? "" : "->" + path);
-//     }
-
-//     return path;
-// }
-    
-    string Algorithms::shortestPath(const Graph &graph, size_t start, size_t end)
+string Algorithms::shortestPath(const Graph &graph, size_t start, size_t end)
 {
     vector<vector<int>> adjMatrix = graph.getAdjacencyMatrix();
     size_t n = adjMatrix.size();
+    // Initialize the distance from the start vertex to all other vertices as infinity
     vector<int> distance(n, numeric_limits<int>::max());
+    // Initialize the parent of each vertex as -1 (no parent)
     vector<int> parent(n, -1);
 
+    // The distance from the start vertex to itself is 0
     distance[start] = 0;
+    // Create a queue for the BFS and add the start vertex to it
     queue<size_t> q;
     q.push(start);
 
+    // If there's a negative cycle in the graph, return "-1"
     if (negativeCycle(graph))
     {
         return "-1";
     }
 
+    // While there are still vertices to visit
     while (!q.empty())
     {
+        // Get the next vertex to visit
         size_t node = q.front();
         q.pop();
 
+        // For each vertex in the graph
         for (size_t i = 0; i < n; ++i)
         {
+            // If there's an edge from the current vertex to this vertex and we haven't visited it yet
             if (adjMatrix[node][i] != 0 && distance[i] == numeric_limits<int>::max())
             {
+                // Update the shortest distance to this vertex and set its parent
                 distance[i] = distance[node] + adjMatrix[node][i];
                 parent[i] = node;
+                // Add this vertex to the queue to visit its neighbors
                 q.push(i);
             }
         }

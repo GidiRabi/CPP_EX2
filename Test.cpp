@@ -23,12 +23,7 @@ TEST_CASE("Comprehensive graph test with different sizes")
         {0, 2, 0}};
     g2.loadGraph(graph2);
 
-    ariel::Graph g3;
-    vector<vector<int>> graph3 = {
-        {0, 2, 0, 1, 1},
-        {2, 0, 2, 1, 1},
-        {0, 2, 0, 1, 1}};
-    g3.loadGraph(graph3);
+    // Removed g3 as it was not a square matrix
 
     ariel::Graph g4;
     vector<vector<int>> graph4 = {
@@ -39,7 +34,6 @@ TEST_CASE("Comprehensive graph test with different sizes")
     // Test printing
     CHECK(g1.printGraph() == "[0, 1, 0]\n[1, 0, 1]\n[0, 1, 0]");
     CHECK(g2.printGraph() == "[0, 2, 0]\n[2, 0, 2]\n[0, 2, 0]");
-    CHECK(g3.printGraph() == "[0, 2, 0, 1, 1]\n[2, 0, 2, 1, 1]\n[0, 2, 0, 1, 1]");
     CHECK(g4.printGraph() == "[0, 2]\n[2, 0]");
 
     // Test arithmetic operations
@@ -55,18 +49,54 @@ TEST_CASE("Comprehensive graph test with different sizes")
     // Test comparison operators
     CHECK(g1 == g1);
     CHECK(g1 != g2);
-    CHECK(g1 != g3);
     CHECK(g1 != g4);
     CHECK(g1 < g2);
     CHECK(g1 <= g2);
     CHECK(g2 > g1);
     CHECK(g2 >= g1);
-    CHECK(g3 != g1);
-    CHECK(g3 != g2);
-    CHECK(g3 != g4);
     CHECK(g4 != g1);
     CHECK(g4 != g2);
-    CHECK(g4 != g3);
+}
+
+TEST_CASE("Test graph comparison operators with different sizes") {
+    ariel::Graph g1, g2, g3, g4;
+
+    vector<vector<int>> graph1 = {{0, 1, 0}, {1, 0, 1}, {0, 1, 0}};
+    g1.loadGraph(graph1);
+
+    vector<vector<int>> graph2 = {{0, 2, 0}, {2, 0, 2}, {0, 2, 0}};
+    g2.loadGraph(graph2);
+
+    vector<vector<int>> graph3 = {
+        {0, 3, 0, 3},
+        {3, 0, 3, 0},
+        {0, 3, 0, 3},
+        {3, 0, 3, 0}
+    };
+    g3.loadGraph(graph3);
+
+    vector<vector<int>> graph4 = {
+        {0, 4, 0, 4, 0},
+        {4, 0, 4, 0, 4},
+        {0, 4, 0, 4, 0},
+        {4, 0, 4, 0, 4},
+        {0, 4, 0, 4, 0}
+    };
+    g4.loadGraph(graph4);
+
+    // Test comparison operators
+    CHECK(g1 < g2);
+    CHECK(g1 <= g2);
+    CHECK(g2 > g1);
+    CHECK(g2 >= g1);
+    CHECK(g1 < g3);
+    CHECK(g1 <= g3);
+    CHECK(g3 > g1);
+    CHECK(g3 >= g1);
+    CHECK(g1 < g4);
+    CHECK(g1 <= g4);
+    CHECK(g4 > g1);
+    CHECK(g4 >= g1);
 }
 
 TEST_CASE("Test graph addition with different sizes")
@@ -293,7 +323,7 @@ TEST_CASE("Test graph arithmetic operators")
 
     g1 += g1;
     CHECK(g1.printGraph() == "[0, 2, 0]\n[2, 0, 2]\n[0, 2, 0]");
-
+    
     g1 -= g1;
     CHECK(g1.printGraph() == "[0, 0, 0]\n[0, 0, 0]\n[0, 0, 0]");
 
@@ -399,7 +429,7 @@ TEST_CASE("Invalid operations")
         {0, 1, 1, 1},
         {1, 0, 2, 1},
         {1, 2, 0, 1}};
-    g2.loadGraph(weightedGraph);
+    CHECK_THROWS(g2.loadGraph(weightedGraph));
     ariel::Graph g5;
     vector<vector<int>> graph2 = {
         {0, 1, 0, 0, 1},
@@ -409,8 +439,6 @@ TEST_CASE("Invalid operations")
         {1, 0, 0, 1, 0}};
     g5.loadGraph(graph2);
     CHECK_THROWS(g5 * g1);
-    CHECK_THROWS(g2 * g1); 
-    CHECK_NOTHROW(g1 * g2); 
 
     // Addition of two graphs with different dimensions
     ariel::Graph g6;

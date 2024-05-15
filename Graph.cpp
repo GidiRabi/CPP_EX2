@@ -6,15 +6,22 @@
 using namespace std;
 using namespace ariel;
 
-/*
-Need to change operator=, and add delete and deconstructor
-slide in lecture 5
-*/
+
 Graph::Graph() : containNeg(false) {} // Initialize containNeg to false in the constructor
 Graph::~Graph() {}
 
+
 void Graph::loadGraph(const vector<vector<int> > &adjMatrix)
 {
+    // Check if the matrix is square
+    for (const auto &row : adjMatrix)
+    {
+        if (row.size() != adjMatrix.size())
+        {
+            throw std::invalid_argument("The graph's order must be NxN");
+        }
+    }
+
     // Validate the adjacency matrix
     for (size_t i = 0; i < adjMatrix.size(); ++i)
     {
@@ -128,9 +135,14 @@ bool Graph::operator==(const Graph &other) {
         return false;
     }
 
+    //If g1 is bigger than g2 or g2 is bigger than g1, return false
+    if(this->containNeg > other.containNeg || this->containNeg < other.containNeg){
+        return false;
+    }
+
     //If the size is the same, check if all the values in the matrix are the same
     for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
-        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
+        for (size_t j = 0; j < this->adjacencyMatrix[0].size(); ++j) {
             if(this->adjacencyMatrix[i][j] != other.adjacencyMatrix[i][j]){
                 return false;
             }
@@ -142,29 +154,6 @@ bool Graph::operator==(const Graph &other) {
 }
 
 bool Graph::operator!=(const Graph &other) {
-
-    // bool check = false;
-    // //Checks if all the values in the matrix are the same
-    // for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
-    //     for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
-    //         if(!check){
-    //             if(this->adjacencyMatrix[i][j] != other.adjacencyMatrix[i][j]){
-    //                 check = true;
-    //             }
-    //         }
-    //     }
-    // }
-
-    // //If all the values are the same, check if the size of the matrix is the same
-    // if(!check){
-    //     if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size() 
-    //             || this->adjacencyMatrix[0].size() != other.adjacencyMatrix[0].size()){
-    //         return true;
-    //     }
-    // }
-
-    // return false;
-
     //the opposite of ==
     return !(*this == other);
 }
