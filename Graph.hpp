@@ -34,6 +34,7 @@ namespace ariel{
         Graph operator--(int);
 
         // Arithmetic Operators
+        Graph& operator=(const Graph &other);
         Graph operator+(const Graph &other);
         Graph& operator+=(const Graph &other);
         Graph operator+();

@@ -6,6 +6,10 @@
 using namespace std;
 using namespace ariel;
 
+/*
+Need to change operator=, and add delete and deconstructor
+slide in lecture 5
+*/
 Graph::Graph() : containNeg(false) {} // Initialize containNeg to false in the constructor
 Graph::~Graph() {}
 
@@ -222,6 +226,20 @@ Graph Graph::operator+(const Graph &other) {
     }
 
     return resultGraph;
+}
+
+Graph& Graph::operator=(const Graph &other) {
+    // Check for self-assignment
+    if (this != &other) {
+        // Free up any resources that `this` might be holding
+        // Resize *this and then 
+        this->adjacencyMatrix.resize(other.adjacencyMatrix.size(), std::vector<int>(other.adjacencyMatrix[0].size(), 0));
+        // copy the data members of `other` to `this` using loadGraph
+        this->loadGraph(other.adjacencyMatrix);
+    }
+
+    // Return a reference to `this`
+    return *this;
 }
 
 Graph& Graph::operator+=(const Graph &other) {

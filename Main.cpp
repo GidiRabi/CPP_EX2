@@ -66,19 +66,38 @@ int main()
 
 
     // Perform multiple operations and display the changes
-    cout << "\n\nOriginal g1:\n" << g1 << "\n\n"
-        << "Is g1 connected? " << (Algorithms::isConnected(g1) ? "Yes" : "No") << "\n\n"
-        << "--g1:\n" << (--g1) << "\n\n"
-        << "Is g1 bipartite? " << Algorithms::isBipartite(g1) << "\n\n"
-        << "g1 + g2:\n" << (g1 + g2) << "\n\n"
-        << "Does g1 contain a cycle? " << (Algorithms::isContainsCycle(g1) ? "Yes" : "No") << "\n\n"
-        << "g1 * 2:\n" << (g1 * 2) << "\n\n"
-        << "Does g1 contain a negative cycle? " << (Algorithms::negativeCycle(g1) ? "Yes" : "No") << "\n\n"
-        << "g1 - g2:\n" << (g1 - g2) << "\n\n"
-        << "Shortest path in g1 from 0 to 2: " << Algorithms::shortestPath(g1, 0, 2) << "\n\n"
-        << "g1 / 2:\n" << (g1 / 2) << "\n\n"
-        << "Is g1 still connected? " << (Algorithms::isConnected(g1) ? "Yes" : "No") << "\n\n"
-        << "g1 += g2 * 2 (changes g1):\n" << (g1 += ++g2) << "\n\n"
-        << "Does g1 now contain a cycle? " << (Algorithms::isContainsCycle(g1) ? "Yes" : "No") << "\n\n";
+    cout << "\n\nOriginal g1:\n" << g1 << "\n\n";
 
+    cout << "Is g1 connected? " << (Algorithms::isConnected(g1) ? "Yes" : "No") << "\n\n";
+
+    ++g1;
+    cout << "++g1:\n" << g1 << "\n\n";
+
+    cout << "Is g1 bipartite? " << Algorithms::isBipartite(g1) << "\n\n";
+
+    g1 = g1 + g2;
+    cout << "g1 = g1 + g2:\n" << g1 << "\n\n";
+
+    cout << "Does g1 contain a cycle? " << (Algorithms::isContainsCycle(g1) ? "Yes" : "No") << "\n\n";
+
+    g1 *= 2;
+    cout << "g1 *= 2:\n" << g1 << "\n\n";
+
+    cout << "Does g1 contain a negative cycle? " << (Algorithms::negativeCycle(g1) ? "Yes" : "No") << "\n\n";
+
+    g1 *= g2;
+    cout << "g1 *= g2:\n" << g1 << "\n\n";
+
+    cout << "Shortest path in g1 from 0 to 2: " << Algorithms::shortestPath(g1, 0, 2) << "\n\n";
+
+    g1 /= 4;
+    cout << "g1 /= 4:\n" << g1 << "\n\n";
+
+    cout << "Is g1 still connected? " << (Algorithms::isConnected(g1) ? "Yes" : "No") << "\n\n";
+
+    g2 *= 2;
+    g1 += g2;
+    cout << "g1 += g2*2:\n" << g1 << "\n\n";
+
+    cout << "Does g1 now contain a cycle? " << (Algorithms::isContainsCycle(g1) ? "Yes" : "No") << "\n\n" << endl;
 }
