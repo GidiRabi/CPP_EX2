@@ -165,32 +165,50 @@ bool Graph::operator!=(const Graph &other) {
     return !(*this == other);
 }
 
+//Prefix: ++Graph
 Graph& Graph::operator++() {
     //Increment all the values in the matrix by 1
     for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
         for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
-            this->adjacencyMatrix[i][j]++;
+
+            this->adjacencyMatrix[i][j] != 0 ? this->adjacencyMatrix[i][j]++ : this->adjacencyMatrix[i][j];
         }
     }
 
     return *this;
 }
 
+//Postfix: Graph++, creates a copy to send and then increments the original
+Graph Graph::operator++(int) {
+    Graph copy = *this;
+    ++(*this);
+    return copy;
+}
+
+//Prefix: --Graph
 Graph& Graph::operator--() {
     //reduce all the values in the matrix by 1
     for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
-        for (size_t j = 0; j < this->adjacencyMatrix[i].size(); ++j) {
-            this->adjacencyMatrix[i][j]--;
+        for (size_t j = 0; j < this->adjacencyMatrix[0].size(); ++j) {
+            this->adjacencyMatrix[i][j] != 0 ? this->adjacencyMatrix[i][j]-- : this->adjacencyMatrix[i][j];            
         }
     }
 
     return *this;
 }
 
+//Postfix: Graph--, creates a copy to send and then reduce one from the original
+Graph Graph::operator--(int) {
+    Graph copy = *this;
+    --(*this);
+    return copy;
+}
+
 Graph Graph::operator+(const Graph &other) {
-    // Check if the graphs have the same size
-    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
-        throw invalid_argument("not same size.");
+    // Check if the graphs have the same rows and columns
+    if(this->adjacencyMatrix.size() != other.adjacencyMatrix.size() 
+            || this->adjacencyMatrix[0].size() != other.adjacencyMatrix[0].size()){
+        throw invalid_argument("The graphs must have the same order.");
     }
 
     Graph resultGraph;
@@ -207,9 +225,10 @@ Graph Graph::operator+(const Graph &other) {
 }
 
 Graph& Graph::operator+=(const Graph &other) {
-    // Check if the graphs have the same size
-    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
-        throw invalid_argument("not same size.");
+    // Check if the graphs have the same rows and columns
+    if(this->adjacencyMatrix.size() != other.adjacencyMatrix.size() 
+            || this->adjacencyMatrix[0].size() != other.adjacencyMatrix[0].size()){
+        throw invalid_argument("The graphs must have the same order.");
     }
 
     // Add the edge weights of the two graphs element-wise
@@ -229,9 +248,10 @@ Graph Graph::operator+() {
 }
 
 Graph Graph::operator-(const Graph &other) {
-    // Check if the graphs have the same size
-    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
-        throw invalid_argument("not same size.");
+    // Check if the graphs have the same rows and columns
+    if(this->adjacencyMatrix.size() != other.adjacencyMatrix.size() 
+            || this->adjacencyMatrix[0].size() != other.adjacencyMatrix[0].size()){
+        throw invalid_argument("The graphs must have the same order.");
     }
 
     Graph resultGraph;
@@ -248,9 +268,10 @@ Graph Graph::operator-(const Graph &other) {
 }
 
 Graph& Graph::operator-=(const Graph &other) {
-    // Check if the graphs have the same size
-    if (this->adjacencyMatrix.size() != other.adjacencyMatrix.size()) {
-        throw invalid_argument("not same size.");
+    // Check if the graphs have the same rows and columns
+    if(this->adjacencyMatrix.size() != other.adjacencyMatrix.size() 
+            || this->adjacencyMatrix[0].size() != other.adjacencyMatrix[0].size()){
+        throw invalid_argument("The graphs must have the same order.");
     }
 
     // Remove the edge weights of the two graphs element-wise
@@ -278,7 +299,7 @@ Graph Graph::operator-() {
 
 Graph Graph::operator/(int scalar) {
     if(scalar == 0){
-        throw invalid_argument("cannot divide by zero.");
+        throw invalid_argument("Cannot divide by zero.");
     }
 
     Graph resultGraph;
@@ -296,7 +317,7 @@ Graph Graph::operator/(int scalar) {
 
 Graph& Graph::operator/=(int scalar) {
     if(scalar == 0){
-        throw invalid_argument("cannot divide by zero.");
+        throw invalid_argument("Cannot divide by zero.");
     }
 
     // Divide the edge weights of the graph by the scalar
@@ -367,6 +388,19 @@ Graph Graph::operator*(const Graph &other) {
     return resultGraph;
 }
 
+Graph Graph::operator*(int scalar) {
+    
+    Graph resultGraph;
+    resultGraph.adjacencyMatrix.resize(this->adjacencyMatrix.size(), std::vector<int>(this->adjacencyMatrix[0].size(), 0));
+
+    // Multiply the adjacency matrices of the two graphs
+    for (size_t i = 0; i < this->adjacencyMatrix.size(); ++i) {
+        for (size_t j = 0; j < this->adjacencyMatrix[0].size(); ++j) {
+            resultGraph.adjacencyMatrix[i][j] *= scalar;            
+        }
+    }
+    return resultGraph;
+}
 
 ostream& ariel::operator<<(ostream &os, const ariel::Graph &graph) {
     

@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//////////// Added Graph tests ///////////
+//////////// Added Graph tests ////////////
 
 TEST_CASE("Comprehensive graph test with different sizes")
 {
@@ -276,7 +276,7 @@ TEST_CASE("Test graph increment and decrement operators")
     g1.loadGraph(graph);
 
     ++g1;
-    CHECK(g1.printGraph() == "[1, 2, 1]\n[2, 1, 2]\n[1, 2, 1]");
+    CHECK(g1.printGraph() == "[0, 2, 0]\n[2, 0, 2]\n[0, 2, 0]");
 
     --g1;
     CHECK(g1.printGraph() == "[0, 1, 0]\n[1, 0, 1]\n[0, 1, 0]");

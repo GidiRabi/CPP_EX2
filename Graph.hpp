@@ -18,6 +18,7 @@ namespace ariel{
         string printGraph() const;
         const vector<vector<int> >& getAdjacencyMatrix() const;
         bool containsNegative() const; // Declare a getter for containNeg
+
         // Comparison Operators
         bool operator>(const Graph &other);
         bool operator>=(const Graph &other);
@@ -25,9 +26,13 @@ namespace ariel{
         bool operator<=(const Graph &other);
         bool operator==(const Graph &other);
         bool operator!=(const Graph &other);
+
         // Increment and Decrement Operators
         Graph& operator++();
+        Graph operator++(int);
         Graph& operator--();
+        Graph operator--(int);
+
         // Arithmetic Operators
         Graph operator+(const Graph &other);
         Graph& operator+=(const Graph &other);
@@ -35,18 +40,22 @@ namespace ariel{
         Graph operator-(const Graph &other);
         Graph& operator-=(const Graph &other);
         Graph operator-();
+
+        //Division operators
         Graph operator/(int scalar);
         Graph& operator/=(int scalar);
         
+        //Multiplication operators
         Graph& operator*=(int scalar);
         Graph operator*=(const Graph &other);
         Graph operator*(const Graph &other);
+        Graph operator*(int scalar);
         // Output Operator
         friend ostream& operator<<(ostream &os, const Graph &graph);
 
+        //Helper functions
         bool isSubGraph(const Graph &other) const;
         int edgeCount() const;
-
         static void setDiagonalToZero(Graph &graph);
 
     };
